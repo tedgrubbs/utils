@@ -15,19 +15,24 @@ pub mod utils {
     };
 
     for l in options.lines() {
-      let line: Vec<&str> = l.split_whitespace().collect();
-      if line.len() == 0 || line[0].chars().nth(0).unwrap() == '#' {
+
+      if l.len() == 0 || l.chars().nth(0).unwrap() == '#' {
         continue;
       }
 
-      if allowed_opts != None && !allowed_opts.unwrap().contains(&line[0]) {
-        panic!("Unknown config parameter found: {}", line[0])
+      let (option, value) = l.split_once(":").unwrap();
+      let option = option.trim();
+      let value = value.trim();
+
+
+      if allowed_opts != None && !allowed_opts.unwrap().contains(&option) {
+        panic!("Unknown config parameter found: {}", option)
       }
 
       // need to handle case of multiple options in line
       result_hash.insert(
-        line[0].to_string(),
-        line[1..].join(" ")
+        option.to_string(),
+        value.to_string()
       );
 
     }
